@@ -15,5 +15,7 @@
 */
 
 // No features are needed for this test.
-var features = [];
-var xml = xmlHelper.getXmlObject(config, features);
+var xml = xmlHelper.getXmlObject(config);
+
+// Add an audio tag after the last <script>.
+xml.body.script += <audio />;

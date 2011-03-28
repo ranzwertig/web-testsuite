@@ -153,6 +153,9 @@ var configHelper = {
 				//-----------------+------------------------------------------
 				//loop.wav         | Uncomp. 16-bit PCM audio (PCM S16 LE)
 				//song.wav         | Stereo, 44.1 GHz, 16 bps
+                //-----------------+------------------------------------------
+                //loop.webm        | Vorbis
+                //song.webm        | Stereo, 44.1 GHz, 160 kb/s
 				relativePath:{
 					songFlac:"test-audio/song.flac",
 					songM4a:"test-audio/song.m4a",
@@ -160,13 +163,15 @@ var configHelper = {
 					songMp3:"test-audio/song.mp3",
 					songOgg:"test-audio/song.ogg",
 					songWav:"test-audio/song.wav",
+                    songWebm:"test-audio/song.webm",
 					
 					loopFlac:"test-audio/loop.flac",
 					loopM4a:"test-audio/loop.m4a",
 					loopMp2:"test-audio/loop.mp2",
 					loopMp3:"test-audio/loop.mp3",
 					loopOgg:"test-audio/loop.ogg",
-					loopWav:"test-audio/loop.wav"
+					loopWav:"test-audio/loop.wav",
+                    loopWebm:"test-audio/loop.webm"
 				},
 				onDevice:{
 					songFlac:"/virtual/music/test-audio/song.flac",
@@ -175,13 +180,15 @@ var configHelper = {
 					songMp3:"/virtual/music/test-audio/song.mp3",
 					songOgg:"/virtual/music/test-audio/song.ogg",
 					songWav:"/virtual/music/test-audio/song.wav",
+                    songWebm:"/virtual/music/test-audio/song.webm",
 					
 					loopFlac:"/virtual/music/test-audio/loop.flac",
 					loopM4a:"/virtual/music/test-audio/loop.m4a",
 					loopMp2:"/virtual/music/test-audio/loop.mp2",
 					loopMp3:"/virtual/music/test-audio/loop.mp3",
 					loopOgg:"/virtual/music/test-audio/loop.ogg",
-					loopWav:"/virtual/music/test-audio/loop.wav"
+					loopWav:"/virtual/music/test-audio/loop.wav",
+                    loopWebm:"/virtual/music/test-audio/loop.webm"
 				}
 			},
 			playableVideoFiles:{
@@ -314,7 +321,7 @@ var configHelper = {
 				_userInfo:{
 					audioDirectory:"/sdcard/media/audio",
 					videoDirectory:"/sdcard/DCIM/100media",
-					photoDirectory:"/sdcard/DCIM/100media"
+					photoDirectory:"/sdcard/DCIM/100media",
 				},
 				validAddressBookItemId:1,
 				fileSystem:{
@@ -739,7 +746,7 @@ var configHelper = {
 					"Widget.Attachment",
 					"Widget.Account",
 					"Widget.Config"
-				]
+				],
 			};
 			
 			// Testing the asynch config stuff.
@@ -848,5 +855,4 @@ var configHelper = {
 			config[key] = v;
 		}
 	}
-//*/
 })();
