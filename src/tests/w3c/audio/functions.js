@@ -15,7 +15,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:100,
-		name:"play()",
+		name:"play(), dom media play",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-play"],
 		expectedResult:"A sound with a duration with about 6 seconds is playing.",
 		test:function(t){
 			__audioNode.src = __loopToTest;
@@ -27,7 +28,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:200,
-		name:"pause()",
+		name:"pause(), dom-media-pause",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-pause"],
 		expectedResult:"There was no or just a very short sound played.",
 		test:function(t){
 			__audioNode.src = __loopToTest;
@@ -40,7 +42,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:300,
-		name:"event type play",
+		name:"play event, event-media-play",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#event-media-play"],
 		test:function(t){
 			__audioNode._event = ["play", function(){
 				t.success("OK. play event got fired.");
@@ -55,7 +58,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:400,
-		name:"event type pause",
+		name:"pause event, event-media-pause",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#event-media-pause"],
 		test:function(t){
 			__audioNode._event = ["pause", function(){
 				t.success("OK. pause event got fired.");
@@ -72,6 +76,7 @@ __audioFunctionTests = [
 	{
 		id:500,
 		name:"source element",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#the-source-element"],
 		expectedResult:"A sound with a duration with about 6 seconds is playing.",
 		test:function(t){
 			var source = '<source src="'+__loopToTest+'" type="audio/wav">';
@@ -88,7 +93,8 @@ __audioFunctionTests = [
 	//
 	{
 		id:600,
-		name:"show controls",
+		name:"controls attribute, attr-media-controls",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-controls"],
 		expectedResult:"There are audio controls shown (Play, timeline and volume).",
 		test:function(t){
 			dohx.showInfo('<audio id="audio600"></audio>');
@@ -98,7 +104,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:700,
-		name:"control play",
+		name:"controls play",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-controls"],
 		instructions:[
 			"Click the play button and check weather a sound is played."
 		],
@@ -112,7 +119,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:800,
-		name:"control pause",
+		name:"controls pause",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-controls"],
 		instructions:[
 			"While the sound is playing click the pause button."
 		],
@@ -127,7 +135,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:900,
-		name:"control volume",
+		name:"controls volume",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-controls"],
 		instructions:[
 			"While the sound is playing change the volume using the volume control."
 		],
@@ -142,7 +151,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1000,
-		name:"control timeline",
+		name:"controls timeline",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-controls"],
 		instructions:[
 			"While the sound is playing use the timeline control to move forward inside the song."
 		],
@@ -160,7 +170,8 @@ __audioFunctionTests = [
 	//
 	{
 		id:1100,
-		name:"loop",
+		name:"loop attribute, attr-media-loop",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-loop"],
 		instructions:[
 			"Wait until the whole sound was played and check if it starts again."
 		],
@@ -175,7 +186,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1200,
-		name:"autoplay",
+		name:"autoplay attribute, attr-media-autoplay",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#attr-media-autoplay"],
 		instructions:[
 			"After clicking the 'GO' button the sound should automatically start."
 		],
@@ -189,7 +201,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1300,
-		name:"volume",
+		name:"volume, dom-media-volume",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-volume"],
 		expectedResult:"A sound with low volume is played.",
 		test:function(t){
 			dohx.showInfo('<audio id="audio1300"></audio>');
@@ -202,7 +215,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1400,
-		name:"event type volumechange",
+		name:"volumechange event, event-media-volumechange",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#event-media-volumechange"],
 		test:function(t){
 			__audioNode._event = ["volumechange", function(){
 				t.success("OK. volumechange event got fired.");
@@ -220,7 +234,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1500,
-		name:"volume, throw INDEX_SIZE_ERR",
+		name:"volume error, throw INDEX_SIZE_ERR",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-volume"],
 		test:function(t){
 			try {
 				__audioNode.volume = 2;		
@@ -237,7 +252,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1600,
-		name:"muted",
+		name:"muted, dom-media-muted",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-muted"],
 		expectedResult:"The control shows that the sound is playing but you can't hear a sound.",
 		test:function(t){
 			dohx.showInfo('<audio id="audio1600"></audio>');
@@ -250,7 +266,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1700,
-		name:"paused",
+		name:"paused, dom-media-paused",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-paused"],
 		test:function(t){
 			__audioNode.play();
 			__audioNode.pause();
@@ -264,7 +281,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1800,
-		name:" defaultPlaybackRate",
+		name:" defaultPlaybackRate, dom-media-defaultplaybackrate",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-defaultplaybackrate"],
 		test:function(t){
 			__audioNode.defaultPlaybackRate = 1;
 			if (__audioNode.defaultPlaybackRate === 1) {
@@ -277,7 +295,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:1900,
-		name:" playbackRate",
+		name:" playbackRate, dom-media-playbackrate",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#dom-media-playbackrate"],
 		expectedResult:"The sound was played slower than normal.",
 		test:function(t){
 			__audioNode.play();
@@ -290,7 +309,8 @@ __audioFunctionTests = [
 	},
 	{
 		id:2000,
-		name:" event type ratechange",
+		name:"ratechange event, event-media-ratechange",
+		definedInSpecs:["http://www.w3.org/TR/2011/WD-html5-20110113/video.html#event-media-ratechange"],
 		test:function(t){
 			__audioNode._event = ["pause", function(){
 				t.success("OK. ratechange event got fired.");
