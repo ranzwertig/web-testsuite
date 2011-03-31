@@ -31,7 +31,7 @@ var ui = {};
 						'Test function source code:'+
 						'<pre>${testSourceCode}</pre>'+
 						'Error message:'+
-						'<pre>${error}</pre>'+
+						'<pre>${error|safe}</pre>'+
 					'</div>'+
 				'</div>'
 			,
@@ -73,6 +73,7 @@ var ui = {};
 				'<div class="row report">'+
 					'<h1>Test Summary</h1>'+
 					'<div class="count">${numTests} tests in ${numGroups} groups<br />'+
+						'<button class="showStats" onclick="doh.ui.showStats()">Stats</button>'+
 						'<span class="error">${numErrors} errors (${percentError}%)</span><br />'+
 						'<span class="failure">${numFailures} failures (${percentFailure}%)</span><br />'+
 						'<span class="success">${numOks} ok (${percentOk}%)</span><br />'+
@@ -117,13 +118,13 @@ var ui = {};
 		notApplicable:function(test){
 			var data = this._getResultsData(test);
 			n.innerHTML += this._render(data, this._templates.NOT_APPLICABLE);
-			doh.ui.results.push({result:"not applicable", test:data});
+			doh.ui.storeResult({result:"not applicable", test:data});
 		},
 		
 		unsupportedApi:function(test, apis){
 			var data = this._getResultsData(test, {apis:apis.join(", ")});
 			n.innerHTML += this._render(data, this._templates.UNSUPPORTED_API);
-			doh.ui.results.push({result:"unsupported API", test:data});
+			doh.ui.storeResult({result:"unsupported API", test:data});
 		},
 		
 		success:function(test){
@@ -139,7 +140,7 @@ var ui = {};
 			}
 			var data = this._getResultsData(test, {result:resString});
 			n.innerHTML += this._render(data, this._templates.SUCCESS);
-			doh.ui.results.push({result:"success", test:data});
+			doh.ui.storeResult({result:"success", test:data});
 		},
 		
 		showInfo:function(txt){
@@ -176,7 +177,7 @@ var ui = {};
 				failureOrError:isError ? "error" : "failure"
 			});
 			n.innerHTML += this._render(data, this._templates.FAILURE_OR_ERROR);
-			doh.ui.results.push({result:isError ? "error" : "failure", test:data});
+			doh.ui.storeResult({result:isError ? "error" : "failure", test:data});
 		},
 		
 		_getSourceCode:function(test){
@@ -190,10 +191,10 @@ var ui = {};
 		},
 		
 		report:function(numTests, numGroups, numErrors, numFailures, numNotApplicable){
-			var percentFailure = Math.round((numFailures/numTests)*100),
-				percentError = Math.round((numErrors/numTests)*100),
-				percentNotApplicable = Math.round((numNotApplicable/numTests)*100),
-				percentOk = 100 - percentError - percentFailure - percentNotApplicable;
+			var percentFailure = Math.round((numFailures/numTests)*100);
+			var percentError = Math.round((numErrors/numTests)*100);
+			var percentNotApplicable = Math.round((numNotApplicable/numTests)*100);
+			var percentOk = 100 - percentError - percentFailure - percentNotApplicable;
 			n.innerHTML += this._render({
 				numTests: numTests,
 				numGroups: numGroups,
@@ -238,13 +239,17 @@ var ui = {};
 				return;
 			}
 			
-			if (node.className.indexOf("completeInfo")==-1){ // Was the "completeInfo" node clicked?
+			// Try to find out if a parent node has the class "row", then we toggle the current row.
+			while (node.className.indexOf("row")==-1 && node!=document.body){
+				node = node.parentNode;
+			}
+			if (node.className.indexOf("row")!=-1){
 				// Find the "completeInfo" node to toggle it.
-				node = util.query(".completeInfo", e.target);
+				node = embed.query(".completeInfo", node);
 				if (!node || node.length<1) return;
 				node = node[0];
+				this.toggleCompleteInfo(node);
 			}
-			this.toggleCompleteInfo(node);
 		},
 		
 		_oddCounter:0,
@@ -252,9 +257,18 @@ var ui = {};
 			var ret = tpl;
 			data.oddClass = (this._oddCounter++%2) ? "odd" : "";
 			for (var i in data){
-				if (ret.indexOf("${" + i + "}")==-1) continue; // If there is no variable to replace continue.
+				// Check if ${i} or ${i|safe} or alike is given.
+				if (!new RegExp("\\$\\{" + i + "(\\|\\w+)?\\}").test(ret)){
+					continue;
+				}
 				try{
-					ret = ret.replace(new RegExp("\\$\\{" + i + "\\}", "g"), data[i]);
+					// Replace ${i} by the raw string.
+					var htmlified = (""+data[i]);
+					ret = ret.replace(new RegExp("\\$\\{" + i + "\\|safe\\}", "g"), htmlified);
+					
+					// Replace "${i|safe}" by the HTML escaped one. Its an explicit tag matching, but ok for now imho.
+					htmlified = htmlified.replace(/&/gm, "&amp;").replace(/</gm, "&lt;").replace(/>/gm, "&gt;").replace(/"/gm, "&quot;");
+					ret = ret.replace(new RegExp("\\$\\{" + i + "\\}", "g"), htmlified);
 				}catch(e){
 					//console.log(e.message);
 				}
@@ -265,17 +279,18 @@ var ui = {};
 		_getResultsData:function(test, mixin){
 			// Returns results data for all possible cases, to provide a unique set of base data we do it in here.
 			var data = {
-				name:test.name,
-				id:util.getTestId(test),
-				testSourceCode:this._getSourceCode(test),
-				_rawId:test.id
+				name: test.name,
+				groupName: test.group.name,
+				id: util.getTestId(test),
+				testSourceCode: this._getSourceCode(test),
+				_rawId: test.id
 			};
 			return embed.mixin(data, mixin);
 		}
 	};
 })();
 
-util.connect(".content", "onclick", doh.util.hitch(ui, "onContentClick"));
+util.connect(".content", "onclick", embed.hitch(ui, "onContentClick"));
 
 
 
@@ -284,35 +299,36 @@ util.connect(".content", "onclick", doh.util.hitch(ui, "onContentClick"));
 
 
 ui.dialog = {
+	
 	show:function(testName, instructions, expectedResult){
-		util.style(".content", {opacity:0.2});
-		util.query(".manualTest .whatToDo .goButton")[0].removeAttribute("disabled");
-		util.style(".manualTest .result", {display:"none"});
-		util.style(".manualTest", {display:"block"});
-		util.query(".manualTest .testName")[0].innerHTML = testName;
-		util.query(".manualTest .whatToDo .text")[0].innerHTML = instructions;
+		embed.style(embed.query(".content")[0], {opacity:0.2});
+		embed.query(".manualTest .whatToDo .goButton")[0].removeAttribute("disabled");
+		embed.style(embed.query(".manualTest .result")[0], {display:"none"});
+		embed.style(embed.query(".manualTest")[0], {display:"block"});
+		embed.query(".manualTest .testName")[0].innerHTML = testName;
+		embed.query(".manualTest .whatToDo .text")[0].innerHTML = instructions;
 		if (expectedResult){
-			util.query(".manualTest .result .text")[0].innerHTML = expectedResult;
+			embed.query(".manualTest .result .text")[0].innerHTML = expectedResult;
 		}
 	},
 	
 	hide:function(){
-		util.style(".content", {opacity:1});
-		util.style(".manualTest", {display:"none"});
+		embed.style(embed.query(".content")[0], {opacity:1});
+		embed.style(embed.query(".manualTest")[0], {display:"none"});
 		// Hide countdown window too.
 		if (this._countdownInterval){
 			clearInterval(this._countdownInterval);
 			this._countdownInterval = null;
 		}
-		util.style(".manualTest .timeout", {display:"none"});
+		embed.style(embed.query(".manualTest .timeout")[0], {display:"none"});
 	},
 	
 	_countdownInterval:null,
 	showCountDown:function(startTime, timeout){
-		var countdownNode = util.query(".manualTest .timeout .countdown .minutes")[0];
+		var countdownNode = embed.query(".manualTest .timeout .countdown .minutes")[0];
 		var start = startTime.getTime();
-		util.style(".manualTest .timeout", {display:"block"});
-		this._countdownInterval = setInterval(doh.util.hitch(this, function(){
+		embed.style(embed.query(".manualTest .timeout")[0], {display:"block"});
+		this._countdownInterval = setInterval(embed.hitch(this, function(){
 			var delta = (timeout - (new Date().getTime() - start)) / 1000,
 				mins = parseInt(delta/60),
 				secs = parseInt(delta%60);
