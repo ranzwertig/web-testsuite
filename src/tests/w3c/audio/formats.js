@@ -32,7 +32,7 @@
 			{
 				id:100,
 				name:"Play wav file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopWav;
 					audioNode.play();
@@ -44,7 +44,7 @@
 			{
 				id:200,
 				name:"Play flac file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopFlac;
 					audioNode.play();
@@ -56,7 +56,7 @@
 			{
 				id:300,
 				name:"Play m4a file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopM4a;
 					audioNode.play();
@@ -68,7 +68,7 @@
 			{
 				id:400,
 				name:"Play mp2 file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopMp2;
 					audioNode.play();
@@ -80,7 +80,7 @@
 			{
 				id:500,
 				name:"Play mp3 file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopMp3;
 					audioNode.play();
@@ -92,7 +92,7 @@
 			{
 				id:600,
 				name:"Play ogg file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopOgg;
 					audioNode.play();
@@ -104,7 +104,7 @@
 			{
 				id:700,
 				name:"Play webm file",
-				expectedResult:"A sound with a duration with about 6 seconds is playing.",
+				expectedResult:"Can you hear a sound with a duration of about 6 seconds?",
 				test:function(t){
 					audioNode.src = localAudioFiles.loopWebm;
 					audioNode.play();
