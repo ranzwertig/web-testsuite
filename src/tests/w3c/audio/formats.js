@@ -9,7 +9,7 @@
 	// All tests will use this. Its global, so tearDown can access it too and clean up properly.
 	var audioNode = embed.query("audio")[0];
 	
-	dohx.add({
+	dohx.add({name:"html5_audio_element_codecs",
 		mqcExecutionOrderBaseOffset:590000, // This number is the base offset for the execution order, the test ID gets added. Never change this number unless you know what you are doing.
 		tests:[
 			{
@@ -36,6 +36,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopWav;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -48,6 +51,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopFlac;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -60,6 +66,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopM4a;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -72,6 +81,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopMp2;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -84,6 +96,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopMp3;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -96,6 +111,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopOgg;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			},
 			//
@@ -108,6 +126,9 @@
 				test:function(t){
 					audioNode.src = localAudioFiles.loopWebm;
 					audioNode.play();
+				},
+				tearDown:function(){
+				    audioNode.pause();
 				}
 			}
 		]
