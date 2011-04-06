@@ -9,8 +9,10 @@
 	// Global vars to setup the audio sources for the included tests
 	__loopToTest = localAudioFiles.loopMp2;
 	__songToTest = localAudioFiles.songMp2;
+	__mediaMimeType = 'audio/mpeg2';
 	// Some tests will use this. Its global, so tearDown can access it too and clean up properly.
 	__audioNode = embed.query("audio")[0];
+	__audioNode.src = __loopToTest;
 	
 	dohx.add({name:"FMPEG_1_Audio_Layer_2_MP2",
 		mqcExecutionOrderBaseOffset:650000, // This number is the base offset for the execution order, the test ID gets added. Never change this number unless you know what you are doing.
